@@ -22,12 +22,14 @@ def encrypt_algorithm(word):
     f = Fernet(key)
     return f
 
+
 class Window:
 
     def __init__(self, root):
         self.database = []
         self.root = root
         self.root.title("PassGen")
+        self.text = bytes()
         if os.name == "posix":
             self.root.wm_iconbitmap("@"+"pg.xbm")
         elif os.name == "nt":
@@ -50,7 +52,8 @@ class Window:
         mb1.menu = tk.Menu(mb1)
         mb1["menu"] = mb1.menu
         for i in range(1, 11):
-            mb1.menu.add_radiobutton(label=i, variable=self.p_num, value=i, command=lambda: mb1.configure(text=self.p_num.get()))
+            mb1.menu.add_radiobutton(label=i, variable=self.p_num, value=i,
+                                     command=lambda: mb1.configure(text=self.p_num.get()))
 
         label2 = tk.Label(encrypt, text="Password:")
         label2.grid(row=2, column=0)
@@ -60,7 +63,7 @@ class Window:
         button1 = tk.Button(encrypt, text="Encrypt", command=self.encrypt_fun)
         button1.grid(row=3, column=0, columnspan=2)
 
-        decrypt = tk.LabelFrame(left, text="Decrypt", padx=20,pady=20, relief="raised")
+        decrypt = tk.LabelFrame(left, text="Decrypt", padx=20, pady=20, relief="raised")
         decrypt.pack(side="bottom", expand=True, fill="x")
 
         label3 = tk.Label(decrypt, text="Password:")
@@ -91,28 +94,30 @@ class Window:
         menu2.add_command(label="About", command=self.about)
 
     def open(self):
-        file = fd.askopenfile(mode="r",defaultextension=".pgen",
+        file = fd.askopenfile(mode="rb", defaultextension=".pgen",
                               filetypes=(("pgen files", "*.pgen"), ("all files", "*.*")),
                               title="Select file")
-        text = file.read()
-        text = text.split(sep="/n")
-        text = text[:-1]
+        self.text = file.read()
         self.t_box.configure(state="normal")
         self.t_box.delete(1.0, tk.END)
-        for i in text:
-            self.t_box.insert(tk.INSERT, i+"\n")
-
+        self.t_box.insert(tk.INSERT, self.text)
         self.t_box.configure(state="disabled")
 
     def save(self):
-        file = fd.asksaveasfile(mode="w", confirmoverwrite=True, defaultextension=".pgen",
-                                filetypes=(("pgen files", "*.pgen"), ("all files", "*.*")),
-                                title="Select file")
-        encrypted = ""
+        location = fd.asksaveasfilename(confirmoverwrite=True, defaultextension=".pgen",
+                                        filetypes=(("pgen files", "*.pgen"), ("all files", "*.*")),
+                                        title="Select file")
+        file = open(location, "w")
+        v1 = self.database
         for i in self.database:
-            encrypted += i.decode()
-            file.write(encrypted + "/n")
+            file.write(i+"\n")
         file.close()
+        with open(location, "rb") as fe:
+            data = fe.read()
+        key = encrypt_algorithm(self.database[0])
+        encrypted_data = key.encrypt(data)
+        with open(location, "wb") as fe2:
+            fe2.write(encrypted_data)
 
     def encrypt_fun(self):
         self.database = []
@@ -130,17 +135,20 @@ class Window:
             secret_word = ''.join(secrets.choice(alphabet) for el in range(randint(25, 50)))
             self.database.append(secret_word)
             self.t_box.insert(tk.END, secret_word + "\n")
-
         self.t_box.configure(state="disabled")
-        f = encrypt_algorithm(self.database[0])
-        self.database = list(map(lambda x: f.encrypt(bytes(x, "utf-8")), self.database))
 
     def decrypt_fun(self):
         match1 = self.entry2.get()
         f = encrypt_algorithm(match1)
-        match2 = f.decrypt(bytes(self.t_box.get(1.0, 2.0), "utf-8"))
-        if match1 == match2.decode():
+        decoded = f.decrypt(bytes(self.text)).decode().split()
+        match2 = decoded[0]
+        if match1 == match2:
             self.t_box.configure(state="normal")
+            self.t_box.delete(1.0, tk.END)
+            self.t_box.insert(1.0, "File password: " + str(decoded[0])+"\n")
+            self.t_box.insert(tk.END, "Number of passwords generated: " + str(len(decoded)-1) + "\n")
+            for i in range(1, len(decoded)):
+                self.t_box.insert(tk.END, str(decoded[i]) + "\n")
             self.t_box.configure(state="disabled")
 
     def help(self):
@@ -153,5 +161,3 @@ class Window:
 top = tk.Tk()
 window = Window(top)
 top.mainloop()
-
-#z = "gAAAAABedYH-F6pJdWRJrqLTqyiVxNSKjg5one0_zDieDhLXj72FARi6vgnbFJK8beEp0E-03u1pIl8aGZYcJaiqGYF7nrhJ-g=="
