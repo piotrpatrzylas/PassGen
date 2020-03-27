@@ -1,6 +1,6 @@
 # ![logo](pg.ico) PassGen
 
-A tool used to generate and menage passwords. It allows to generate up to 10 passwords, encrypt them and saved to a password-protected \*.pgen file. Using the same program \*.pgen file can be opened and decrypted using password provided during encryption step.
+A tool used to generate and menage passwords. It allows to generate up to 10 passwords, encrypt them and save to a password-protected \*.pgen file. Using the same program \*.pgen file can be opened and decrypted using password provided during the encryption step.
 
 ## Motivation
 
@@ -12,25 +12,25 @@ Standalone executables are available and tested for Windows 10 and Linux(Ubuntu 
 
 ## Usage
 
-Open the file  
+Open the program  
 
 <img src="pg01.jpg" width="500">  
-Choose how many passwords to generate and what will be master password (to encrypt/decrypt a file)  
+Choose how many passwords to generate and what will be a master password (to encrypt/decrypt a file)  
 
 <img src="pg02.jpg" width="500">  
-Click encrypt to preview the passwords  
+Click "Encrypt" to preview the passwords  
 
 <img src="pg03.jpg" width="500">  
-Click on File->Save to save encrypted file with the passwords (in *.pgen format)  
+Click on the "File->Save" to save encrypted file with the passwords (in *.pgen format)  
 
 <img src="pg04.jpg" width="500">  
-Above file can be opened with this program by clicking on File->Open  
+Above file can be opened with this program by clicking on the "File->Open"  
 
 <img src="pg05.jpg" width="500">  
-Encrypted file will be displayed (same text is stored in the file)  
+Encrypted file will be displayed
 
 <img src="pg06.jpg" width="500">  
-To decrypt input the file password and click Decrypt  
+To decrypt provide the file master password and click "Decrypt"  
 
 <img src="pg07.jpg" width="500">  
 
