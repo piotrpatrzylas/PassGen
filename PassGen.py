@@ -16,7 +16,6 @@ This program is free software: you can redistribute it and/or modify
 import tkinter as tk
 from cryptography.fernet import Fernet
 from tkinter import filedialog as fd
-from os import name
 from secrets import choice
 from random import randint
 from base64 import urlsafe_b64encode
@@ -45,11 +44,6 @@ class Window:
         self.root = root
         self.root.title("PassGen")
         self.text = bytes()
-        if name == "posix":
-            self.root.wm_iconbitmap("@"+"/home/piotr/Desktop/PassGen/pg.xbm")
-        elif name == "nt":
-            self.root.wm_iconbitmap("C:\PassGen\pg.ico")
-
         self.menu()
 
         left = tk.LabelFrame(self.root, padx=20, pady=20)
