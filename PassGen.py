@@ -140,7 +140,7 @@ class Window:
 
         alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         for p in range(pass_num):
-            secret_word = ''.join(choice(alphabet) for _ in range(randint(25, 50)))
+            secret_word = ''.join(choice(alphabet) for _ in range(randint(10, 20)))
             self.database.append(secret_word)
             self.t_box.insert(tk.END, secret_word + "\n")
         self.t_box.configure(state="disabled")
